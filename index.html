@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript + DOM</title>
+
+  <style>
+    .red {
+      color: red;
+    }
+
+    .closed {
+      display: none;
+      transition: ease-in-out 1s;
+    }
+
+    li {
+      cursor: pointer;
+    }
+
+    .done {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Shopping List</h1>
+  <p id="first">Get it done today!</p>
+  <div>
+    <input type="text" class="enter-input" placeholder="Enter Items" name="item">
+    <button id="enter">Enter</button>
+  </div>
+  <button class="button">Change Color</button>
+  <button class="buttonTwo">Toggle Menu</button>
+  <ul>
+    <li random="23">Notebook</li>
+    <li>Jello</li>
+    <li>Spinach</li>
+    <li>Rice</li>
+    <li>Birthday Cake</li>
+    <li>Candles</li>
+  </ul>
+
+  <script>
+    document.querySelector(".button").addEventListener("click", function () {
+      const listItem = document.querySelector('li')
+      // listItem.classList.value.includes('red') ? (listItem.classList.remove('red')) : (listItem.classList.add('red'))
+      listItem.classList.toggle('red')
+    })
+
+    document.querySelector('.buttonTwo').addEventListener("click", function () {
+      const list = document.querySelector('ul')
+      // list.classList.value.includes('closed') ? (list.classList.remove('closed')) : (list.classList.add('closed'))
+      list.classList.toggle('closed')
+    })
+
+    function getLength(string) {
+      return string.length
+    }
+
+    function createTag(tag) {
+      return document.createElement(tag)
+    }
+
+    function createNode(content) {
+      return document.createTextNode(content)
+    }
+
+    const configureButtons = () => {
+      const listItems = document.querySelectorAll('li')
+      listItems.forEach(item => {
+        item.addEventListener("click", function (event) {
+          item.classList.toggle('done')
+        })
+        const deleteButton = createTag('button')
+        deleteButton.innerText = "Delete"
+        deleteButton.style.marginLeft = '10px'
+        deleteButton.addEventListener("click", function (event) {
+          item.remove()
+        })
+        item.appendChild(deleteButton)
+      })
+    }
+
+    configureButtons()
+
+    function addListItem(list, item) {
+      const li = createTag('li')
+      li.appendChild(item)
+      li.addEventListener("click", function (event) {
+        li.classList.toggle('done')
+      })
+      const deleteButton = createTag('button')
+      deleteButton.innerText = "Delete"
+      deleteButton.style.marginLeft = '10px'
+      deleteButton.addEventListener("click", function (event) {
+        li.remove()
+      })
+      li.appendChild(deleteButton)
+      const itemsList = document.querySelector(list)
+      itemsList.appendChild(li)
+    }
+
+
+    const input = document.querySelector('input')
+    const enterButton = document.getElementById('enter')
+
+    enterButton.addEventListener("click", function () {
+      const newNode = createNode(input.value)
+      if (getLength(newNode) > 0) {
+        addListItem('ul', newNode)
+        input.value = ''
+      }
+    })
+
+
+    input.addEventListener("keypress", function (event) {
+      const newNode = createNode(input.value)
+      if (getLength(newNode) && event.keyCode == '13') {
+        addListItem('ul', newNode)
+        input.value = ''
+      }
+    })
+
+
+  </script>
+</body>
+
+</html>
